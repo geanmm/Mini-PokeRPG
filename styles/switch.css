@@ -25,6 +25,7 @@
   box-sizing: border-box;
   font-family: "pokemonRS", sans-serif;
   outline: 0;
+  user-select: none;
 }
 
 body {
@@ -119,12 +120,20 @@ body {
   width: 9rem;
 }
 
-.c1,
-.c2,
-.c3 {
+.c1.blue,
+.c2.blue,
+.c3.blue {
   -webkit-box-shadow: 0 -0.75rem 0 var(--DarkGrey);
   -moz-box-shadow: 0 -0.75rem 0 var(--DarkGrey);
-  box-shadow: 0 -0.75rem 0 var(--DarkGrey);
+  box-shadow: 1px -0.75rem 0 var(--DarkGrey);
+}
+
+.c1.red,
+.c2.red,
+.c3.red {
+  -webkit-box-shadow: 0 -0.75rem 0 var(--DarkGrey);
+  -moz-box-shadow: 0 -0.75rem 0 var(--DarkGrey);
+  box-shadow: -1px -0.75rem 0 var(--DarkGrey);
 }
 
 .g1 {
