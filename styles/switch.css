@@ -1,0 +1,528 @@
+@font-face {
+  font-family: "pokemonRS";
+  src: url(../assets/PokemonRS.ttf);
+}
+
+:root {
+  --HighlithBlue: #00eeff;
+  --ShadowBlue: #00a6d2;
+  --LightBlue: #1dc1f2;
+  --DarkBlue: #158eb3;
+
+  --HightlightRed: #ff6060;
+  --ShadowRed: #ce0f00;
+  --LightRed: #f42717;
+  --DarkRed: #ad0000;
+
+  --LightGrey: #737373;
+  --Grey: #3b3b3b;
+  --DarkGrey: #2b2b2b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "pokemonRS", sans-serif;
+  outline: 0;
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: #fff8bc;
+}
+.switch {
+  display: flex;
+  justify-content: center;
+}
+
+.screen {
+  position: relative;
+  width: calc(19 * 0.75rem);
+  background: var(--Grey);
+  border-top: 0.75rem solid var(--LightGrey);
+  border-bottom: 0.75rem solid var(--DarkGrey);
+  transition: linear 300ms width;
+}
+.main-screen,
+.border-screen {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.controller {
+  position: relative;
+  width: 9rem;
+  height: 25.5rem;
+}
+.controller div,
+.screen div {
+  position: absolute;
+}
+
+.blue {
+  right: 0;
+  border-top: 0.75rem solid var(--HighlithBlue);
+  border-bottom: 0.75rem solid var(--ShadowBlue);
+  background: var(--LightBlue);
+}
+
+.red {
+  left: 0;
+  border-top: 0.75rem solid var(--HightlightRed);
+  border-bottom: 0.75rem solid var(--DarkRed);
+  background: var(--LightRed);
+}
+
+.gray {
+  border-top: 0.75rem solid var(--LightGrey);
+  border-bottom: 0.75rem solid var(--DarkGrey);
+  background: var(--Grey);
+}
+
+.c1 {
+  z-index: 10;
+  height: 100%;
+  width: 4.5rem;
+}
+
+.c2 {
+  z-index: 9;
+  height: calc(100% - 1.5rem);
+  top: 0.75rem;
+  width: 6rem;
+}
+
+.c3 {
+  z-index: 8;
+  height: calc(100% - 3rem);
+  top: 1.5rem;
+  width: 7.5rem;
+}
+
+.c4 {
+  z-index: 7;
+  height: calc(100% - 4.5rem);
+  top: 2.25rem;
+  width: 8.25rem;
+}
+.c5 {
+  z-index: 6;
+  height: calc(100% - 7.5rem);
+  top: 3.75rem;
+  width: 9rem;
+}
+
+.c1,
+.c2,
+.c3 {
+  -webkit-box-shadow: 0 -0.75rem 0 var(--DarkGrey);
+  -moz-box-shadow: 0 -0.75rem 0 var(--DarkGrey);
+  box-shadow: 0 -0.75rem 0 var(--DarkGrey);
+}
+
+.g1 {
+  z-index: 3;
+  left: 1.5rem;
+  height: 100%;
+  width: calc(100% - 3rem);
+}
+
+.g2 {
+  z-index: 2;
+  top: 0.75rem;
+  left: 0.75rem;
+  height: calc(100% - 0.75rem);
+  width: calc(100% - 1.5rem);
+}
+
+.g3 {
+  z-index: 1;
+  top: 1.5rem;
+  height: calc(100% - 2.25rem);
+  width: 100%;
+}
+
+.g-mini {
+  height: 0.75rem;
+  background: var(--Grey);
+  bottom: 0;
+}
+.g-mini.Sm {
+  width: 2.25rem;
+}
+.g-mini.Xs {
+  width: 0.75rem;
+}
+
+.g-mini:first-child {
+  left: 3rem;
+}
+
+.g-mini:last-child {
+  right: 3rem;
+}
+
+.g-mini:nth-child(2) {
+  left: 12rem;
+}
+.g-mini:nth-child(3) {
+  right: 12rem;
+}
+
+.border-screen {
+  width: 100%;
+  height: 100%;
+}
+
+.b1 {
+  z-index: 4;
+  top: 1.5rem;
+  left: 2.25rem;
+  height: calc(100% - 3rem);
+  width: calc(100% - 4.5rem);
+  background: black;
+}
+
+.b2 {
+  z-index: 5;
+  top: 2.25rem;
+  left: 1.5rem;
+  height: calc(100% - 4.5rem);
+  width: calc(100% - 3rem);
+  background: black;
+}
+
+.buttons {
+  z-index: 11;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.square {
+  width: 1.5rem;
+  height: 1.5rem;
+  bottom: 3.75rem;
+  background: var(--LightGrey);
+}
+
+.square.left {
+  right: 1.5rem;
+}
+
+.square.right {
+  left: 1.5rem;
+}
+.squares {
+  position: absolute;
+  width: 6rem;
+  height: 6rem;
+}
+.squares.left {
+  bottom: 8.25rem;
+  left: 1.5rem;
+}
+
+.squares.right {
+  top: 3.75rem;
+  left: 1.5rem;
+}
+
+.squares .square {
+  position: absolute;
+}
+
+.upButton {
+  left: 2.25rem;
+}
+
+.downButton {
+  left: 2.25rem;
+  top: 5.25rem;
+}
+
+.leftButton {
+  top: 3rem;
+}
+
+.rightButton {
+  top: 3rem;
+  right: 0;
+}
+
+.square.b {
+  -webkit-box-shadow: 0 0.75rem 0 var(--ShadowBlue),
+    inset -0.75rem -0.75rem 0 var(--Grey);
+  -moz-box-shadow: 0 0.75rem 0 var(--ShadowBlue),
+    inset -0.75rem -0.75rem 0 var(--Grey);
+  box-shadow: 0 0.75rem 0 var(--ShadowBlue),
+    inset -0.75rem -0.75rem 0 var(--Grey);
+}
+
+.square.r {
+  -webkit-box-shadow: 0 0.75rem 0 var(--ShadowRed),
+    inset -0.75rem -0.75rem 0 var(--Grey);
+  -moz-box-shadow: 0 0.75rem 0 var(--ShadowRed),
+    inset -0.75rem -0.75rem 0 var(--Grey);
+  box-shadow: 0 0.75rem 0 var(--ShadowRed),
+    inset -0.75rem -0.75rem 0 var(--Grey);
+}
+
+.analog {
+  z-index: 11;
+  position: relative;
+  left: 2.25rem;
+  width: 4.5rem;
+  height: 3rem;
+}
+
+.analog.left {
+  top: 6.75rem;
+}
+
+.analog.right {
+  top: 14.25rem;
+}
+
+.retangle {
+  background: var(--Grey);
+}
+
+.retangle.v {
+  z-index: 2;
+  width: 1.5rem;
+  height: 3rem;
+  left: 1.5rem;
+}
+.retangle.h {
+  z-index: 1;
+  width: 3rem;
+  height: 1.5rem;
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+.retangle.lg {
+  width: 4.5rem;
+  height: 0.75rem;
+  top: 0.75rem;
+}
+
+.right .retangle.v,
+.right .retangle.h {
+  -webkit-box-shadow: 0 -0.75rem 0 var(--LightGrey), 0 -1.5rem 0 var(--Grey),
+    0 0.75rem 0 var(--ShadowRed);
+  -moz-box-shadow: 0 -0.75rem 0 var(--LightGrey), 0 -1.5rem 0 var(--Grey),
+    0 0.75rem 0 var(--ShadowRed);
+  box-shadow: 0 -0.75rem 0 var(--LightGrey), 0 -1.5rem 0 var(--Grey),
+    0 0.75rem 0 var(--ShadowRed);
+}
+.right .retangle.lg {
+  -webkit-box-shadow: 0 -0.75rem 0 var(--Grey), 0 0.75rem 0 var(--ShadowRed);
+  -moz-box-shadow: 0 -0.75rem 0 var(--Grey), 0 0.75rem 0 var(--ShadowRed);
+  box-shadow: 0 -0.75rem 0 var(--Grey), 0 0.75rem 0 var(--ShadowRed);
+}
+
+.left .retangle.v,
+.left .retangle.h {
+  -webkit-box-shadow: 0 -0.75rem 0 var(--LightGrey), 0 -1.5rem 0 var(--Grey),
+    0 0.75rem 0 var(--ShadowBlue);
+  -moz-box-shadow: 0 -0.75rem 0 var(--LightGrey), 0 -1.5rem 0 var(--Grey),
+    0 0.75rem 0 var(--ShadowBlue);
+  box-shadow: 0 -0.75rem 0 var(--LightGrey), 0 -1.5rem 0 var(--Grey),
+    0 0.75rem 0 var(--ShadowBlue);
+}
+.left .retangle.lg {
+  -webkit-box-shadow: 0 -0.75rem 0 var(--Grey), 0 0.75rem 0 var(--ShadowBlue);
+  -moz-box-shadow: 0 -0.75rem 0 var(--Grey), 0 0.75rem 0 var(--ShadowBlue);
+  box-shadow: 0 -0.75rem 0 var(--Grey), 0 0.75rem 0 var(--ShadowBlue);
+}
+.mini {
+  z-index: 3;
+  position: absolute;
+  top: 2.25rem;
+  height: 0.75rem;
+  width: 2.25rem;
+  background: var(--Grey);
+}
+
+.mini.b {
+  right: 0.75rem;
+  box-shadow: 0 0.75rem 0 var(--ShadowBlue);
+}
+
+.mini.r {
+  left: 0.75rem;
+  box-shadow: 0 0.75rem 0 var(--ShadowRed);
+}
+
+.mini.vertical {
+  top: 1.5rem;
+  left: 1.5rem;
+  height: 2.25rem;
+  width: 0.75rem;
+}
+
+.playBtn {
+  z-index: 13;
+  position: absolute;
+  display: flex;
+  left: 2.25rem;
+  top: 7.5rem;
+  gap: 0.75rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.playBtn:hover {
+  animation: buttonScale 1s infinite;
+}
+
+.logo {
+  position: relative;
+  width: calc(6 * 0.75rem);
+  height: calc(12 * 0.75rem);
+}
+
+.l-Item {
+  position: absolute;
+  background: var(--Grey);
+}
+
+.r-Item {
+  position: absolute;
+  background: white;
+}
+
+.l1 {
+  z-index: 2;
+  border: 0.75rem solid white;
+  border-left: none;
+  height: 100%;
+  width: calc(100% - 1.5rem);
+  right: 0;
+}
+
+.l2 {
+  z-index: 1;
+  border-top: 0.75rem solid white;
+  border-bottom: 0.75rem solid white;
+  height: calc(100% - 1.5rem);
+  width: calc(100% - 1.5rem);
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+.l3 {
+  border-left: 0.75rem solid white;
+  height: calc(100% - 3rem);
+  width: 100%;
+  top: 1.5rem;
+  left: 0;
+}
+
+.sq {
+  z-index: 3;
+  top: 2.25rem;
+  left: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: white;
+}
+
+.r-Item.sq {
+  background: var(--DarkGrey);
+}
+
+.logo.rotate {
+  transform: rotate(180deg);
+}
+
+.playTitle {
+  position: absolute;
+  left: 3rem;
+  bottom: -3rem;
+  font-size: 2rem;
+  color: white;
+}
+
+.main-screen {
+  z-index: 6;
+  position: relative;
+  top: 3.75rem;
+  left: 3.75rem;
+  height: calc(100% - 7.5rem);
+  width: calc(100% - 7.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: green;
+  overflow: hidden;
+}
+
+.game-content {
+  display: flex;
+  flex-direction: column;
+}
+
+span:active > .mini,
+.mini.b:active,
+.square:active,
+.analog:active {
+  transform: scale(1.1) translateY(-5px);
+}
+
+span:hover > .mini,
+.mini.b:hover,
+.square:hover,
+.analog:hover {
+  cursor: pointer;
+}
+
+.shadow {
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0px 0px 0px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+@media only screen and (min-width: 320px) and (orientation: portrait) {
+  main {
+    transform: rotate(90deg) scale(0.7);
+  }
+}
+
+@media only screen and (min-width: 320px) and (orientation: landscape) {
+  main {
+    transform: scale(0.7);
+  }
+}
+
+@media only screen and (min-width: 897px) and (orientation: portrait) {
+  main {
+    transform: rotate(90deg) scale(1);
+  }
+}
+
+@media only screen and (min-width: 915px) and (orientation: landscape) {
+  main {
+    transform: scale(1);
+  }
+}
+
+@keyframes buttonScale {
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,250 @@
+.flickeringScreen {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.horizontalT {
+  background: black;
+  width: 0px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hShow {
+  animation: hTransition 500ms linear;
+}
+
+.verticalT {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.verticalT span {
+  width: 100%;
+  background: black;
+  height: 144px;
+  opacity: 0;
+  transition: linear 500ms height;
+}
+
+.verticalT span:last-child {
+  margin-top: auto;
+}
+
+.vShow {
+  opacity: 1;
+  height: 0px;
+}
+
+.battleStart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: black;
+  background-image: url("../assets/battle/battleBackground.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: linear 300ms opacity;
+  font-weight: 600;
+}
+
+.flicker {
+  animation-name: flickering;
+  animation-duration: 300ms;
+  animation-iteration-count: 4;
+}
+
+.show {
+  opacity: 1;
+}
+.battleStart img,
+.pokemon,
+.pokeData,
+.pokeOptions,
+.battleStart button {
+  position: absolute;
+  display: none;
+}
+
+.show img,
+.show .pokemon {
+  display: block;
+}
+
+.show .pokeData {
+  display: flex;
+  align-items: start;
+}
+
+.battleStart button {
+  z-index: 5;
+  top: 20px;
+  right: 20px;
+  padding: 10px 6px 6px 6px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  pointer-events: none;
+  color: white;
+  background: #fa4730;
+  border: none;
+}
+
+.battleStart button.show {
+  display: inline-block;
+}
+
+.battleStart button:hover {
+  background: #f42717;
+}
+
+.battleStart.show button {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.playerField {
+  z-index: 1;
+  transform: scale(1.68);
+  bottom: 112px;
+  left: 50px;
+  animation: moveLeft 500ms 80ms linear;
+}
+
+.pokeField {
+  transform: scale(1.68);
+  top: 120px;
+  right: 80px;
+  animation: moveRight 500ms 100ms linear;
+}
+
+.pokemon {
+  z-index: 1;
+  width: 128px;
+  height: 110px;
+  right: 80px;
+  top: 20px;
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-position-y: bottom;
+  transform: scale(1.3);
+  filter: brightness(0);
+  animation: moveRight 500ms 100ms linear;
+}
+
+.rightAnswer {
+  filter: brightness(1);
+}
+
+.pokeData {
+  gap: 2px;
+  top: 30px;
+  padding: 8px 5px;
+  left: 50px;
+  transform: scale(1.5);
+  color: #344a45;
+  font-size: 0.4rem;
+  letter-spacing: 0.04rem;
+  width: 110px;
+  height: 30px;
+  background-image: url("../assets/battle/pokeInfo.png");
+  background-size: cover;
+  animation: moveLeft 700ms 150ms linear;
+}
+.pokeData .name {
+  text-transform: uppercase;
+}
+.pokeData .lvl {
+  margin-left: auto;
+  margin-right: 10px;
+}
+.pokeData .gender {
+  width: 4px;
+  height: 7px;
+  margin-top: -2px;
+  background-size: cover;
+}
+.show .pokeOptions {
+  display: flex;
+  flex-direction: column;
+}
+.pokeOptions {
+  width: 100%;
+  align-items: center;
+  height: 90px;
+  padding: 15px;
+  color: #344a45;
+  bottom: 0;
+}
+.pokeOptions h5 {
+  text-align: center;
+  position: absolute;
+  top: 10px;
+  color: #e62a1c;
+}
+
+.options {
+  position: absolute;
+  width: calc(100% - 30px);
+  top: 35px;
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  justify-content: center;
+}
+.option {
+  text-transform: uppercase;
+  padding: 5px 10px 0 0;
+  cursor: pointer;
+  margin: 0 auto 0 auto;
+}
+
+.option:hover {
+  background-image: url("../assets/battle/select.png");
+  background-repeat: no-repeat;
+  background-position-x: right;
+  /* background: red; */
+}
+@keyframes moveLeft {
+  0% {
+    left: 600px;
+  }
+  100% {
+    left: 50;
+  }
+}
+
+@keyframes moveRight {
+  0% {
+    right: 600px;
+  }
+  100% {
+    right: 80px;
+  }
+}
+
+@keyframes flickering {
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hTransition {
+  99% {
+    width: 100%;
+  }
+  100% {
+    width: 0px;
+  }
+}
