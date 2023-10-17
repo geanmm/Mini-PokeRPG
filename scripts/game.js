@@ -28,16 +28,18 @@ const offset = {
 //Mapa 40x60 tiles
 const collisionsMap = [];
 const battleAreaMap = [];
-//Separar todas as 60 linhas
+const finishAreaMap = [];
+//Separar todas as 60 linhas (40 colunas)
 for (let i = 0; i < collisions.length; i += 40) {
   collisionsMap.push(collisions.slice(i, i + 40));
   battleAreaMap.push(battleAreaData.slice(i, i + 40));
+  finishAreaMap.push(finishArea.slice(i, i + 40));
 }
 
 const boundaries = [];
 collisionsMap.forEach((row, i) => {
   row.forEach((item, j) => {
-    if (item === 2361)
+    if (item === 1)
       boundaries.push(
         new Boundary({
           position: {
@@ -52,7 +54,7 @@ collisionsMap.forEach((row, i) => {
 const battleAreas = [];
 battleAreaMap.forEach((row, i) => {
   row.forEach((item, j) => {
-    if (item === 757)
+    if (item === 1)
       battleAreas.push(
         new Boundary({
           position: {
@@ -64,6 +66,20 @@ battleAreaMap.forEach((row, i) => {
   });
 });
 
+const gameEndArea = [];
+finishAreaMap.forEach((row, i) => {
+  row.forEach((item, j) => {
+    if (item === 1)
+      gameEndArea.push(
+        new Boundary({
+          position: {
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y,
+          },
+        })
+      );
+  });
+});
 //Sprite 240x80
 const player = new Sprite({
   position: {
@@ -112,7 +128,13 @@ const keys = {
     pressed: false,
   },
 };
-const movables = [background, ...boundaries, ...battleAreas, foreground];
+const movables = [
+  background,
+  foreground,
+  ...boundaries,
+  ...battleAreas,
+  ...gameEndArea,
+];
 function rectangularCollision({ object1, object2 }) {
   return (
     object1.position.x + object1.width - 10 >= object2.position.x &&
@@ -122,8 +144,9 @@ function rectangularCollision({ object1, object2 }) {
   );
 }
 
-const wildPokemon = {
-  found: false,
+const playerStatus = {
+  fighting: false,
+  finish: false,
 };
 // console.log(imageLoading);
 
@@ -139,13 +162,16 @@ function animate() {
   battleAreas.forEach((zone) => {
     zone.draw();
   });
+  gameEndArea.forEach((tile) => {
+    tile.draw();
+  });
   player.draw();
   foreground.draw();
 
   let moving = true;
   player.moving = false;
 
-  if (wildPokemon.found) return;
+  if (playerStatus.fighting || playerStatus.finish) return;
   //BattleZones
   if (
     keys.up.pressed ||
@@ -178,8 +204,36 @@ function animate() {
         Math.random() < 0.02
       ) {
         console.log("battle");
-        wildPokemon.found = true;
+        playerStatus.fighting = true;
         startBattle();
+        break;
+      }
+    }
+    for (let i = 0; i < gameEndArea.length; i++) {
+      const finish = gameEndArea[i];
+
+      const overlappingWidth =
+        Math.min(
+          player.position.x + player.width,
+          finish.position.x + finish.width
+        ) - Math.max(player.position.x, finish.position.x);
+
+      const overlappingHeight =
+        Math.min(
+          player.position.y + player.height,
+          finish.position.y + finish.height
+        ) - Math.max(player.position.y, finish.position.y);
+
+      const overlappingArea = overlappingWidth * overlappingHeight;
+      if (
+        rectangularCollision({
+          object1: player,
+          object2: finish,
+        }) &&
+        overlappingArea > (player.width * player.height) / 2
+      ) {
+        playerStatus.finish = true;
+        finishGame();
         break;
       }
     }
@@ -337,3 +391,9 @@ window.addEventListener("keyup", (e) => {
       break;
   }
 });
+
+function finishGame() {
+  backgroundMusic.stop();
+  finishMusic.play();
+  console.log("gg");
+}

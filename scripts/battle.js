@@ -6,6 +6,8 @@ const vTransition = document
 const battleScreen = document.querySelector(".battleStart");
 
 function startBattle() {
+  backgroundMusic.stop();
+  battleMusic.play();
   handleBattleRender();
   flickeringTransition.classList.toggle("flicker");
 
@@ -106,12 +108,16 @@ function renderPokemon(pokemon, options) {
       };
 
       if (selected.innerText.toLowerCase() === pokemon.name) {
+        battleMusic.stop();
+        pokemonCaughtMusic.play();
         reveal();
         storage.push(pokemon);
         optionsContainer.innerHTML = `<span class="post">You've caught a ${pokemon.name.toUpperCase()}!</span>`;
 
         nextBtn.classList.add("show");
       } else {
+        battleMusic.stop();
+        pokemonScapeMusic.play();
         reveal();
         optionsContainer.innerHTML = `<span class="post">Nice try, but the pokemon was a ${pokemon.name}</span>`;
         retryBtn.classList.add("show");
@@ -129,25 +135,7 @@ function renderPokemon(pokemon, options) {
     nextBtn.classList.remove("show");
     retryBtn.classList.remove("show");
   }
-
-  // for (let i = 0; i < pokemonOptions.length; i++) {
-  //   pokemonOptions[i].innerHTML = `${array[i].name.split("-")[0]}`;
-  //   pokemonOptions[i].addEventListener("click", () =>
-  //     checkOption(pokemon, pokemonOptions[i].innerText.toLowerCase())
-  //   );
-  // }
 }
-
-// function checkOption(pokemon, option) {
-//   console.log(pokemon.name, option);
-//   if (pokemon.name.split("-")[0] == option) {
-
-//   } else {
-//     console.log(storage);
-//   }
-// }
-
-// document.querySelector(".battleStart button").onclick = () => finishBattle();
 
 function finishBattle() {
   hTransition.classList.toggle("hShow");
@@ -155,5 +143,8 @@ function finishBattle() {
   vTransition[1].removeAttribute("style");
   battleScreen.classList.toggle("show");
 
-  wildPokemon.found = false;
+  playerStatus.fighting = false;
+  battleMusic.stop();
+  pokemonCaughtMusic.stop();
+  backgroundMusic.play();
 }

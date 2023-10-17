@@ -1,6 +1,12 @@
 const screen = document.querySelector(".screen");
 const playBtn = document.querySelector(".playBtn");
 
+const backgroundMusic = new createSound("background");
+const battleMusic = new createSound("battleStart");
+const pokemonCaughtMusic = new createSound("pokemonCaught");
+const pokemonScapeMusic = new createSound("pokemonScape");
+const finishMusic = new createSound("finish");
+
 playBtn.onclick = () => {
   const screenBorders = document.querySelector(".border-screen");
   const screenMain = document.querySelector(".main-screen");
@@ -10,8 +16,31 @@ playBtn.onclick = () => {
     screenBorders.classList.toggle("visible");
     screenMain.classList.toggle("visible");
     playBtn.style.display = "none";
+    backgroundMusic.play();
   }, 300);
 };
+
+function createSound(name) {
+  const src = `./assets/sounds/${name}.mp3`;
+
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  if (name === "background") this.sound.volume = 0.1;
+  else this.sound.volume = 0.2;
+
+  document.body.appendChild(this.sound);
+
+  this.play = function () {
+    this.sound.play();
+  };
+  this.stop = function () {
+    this.sound.pause();
+    if (name !== "background") this.sound.currentTime = 0;
+  };
+}
 
 const leftButtons = document.querySelectorAll(".leftButton");
 const rightButtons = document.querySelectorAll(".rightButton");
