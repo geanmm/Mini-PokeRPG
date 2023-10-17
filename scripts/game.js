@@ -395,5 +395,21 @@ window.addEventListener("keyup", (e) => {
 function finishGame() {
   backgroundMusic.stop();
   finishMusic.play();
-  console.log("gg");
+  const endContent = document.querySelector("#end-content");
+  const message = document.createElement("span");
+  message.innerText = `You've caught ${storage.length} pokemons!`;
+  const container = document.createElement("div");
+  container.classList.add("storage");
+  storage.forEach((pokemon, i) => {
+    if (i > 15) return;
+    const poke = document.createElement("div");
+    poke.style.backgroundImage = `url(${pokemon.sprite})`;
+    container.appendChild(poke);
+  });
+  endContent.prepend(container);
+  endContent.prepend(message);
+
+  const gameFinish = document.querySelector(".finish");
+  gameFinish.style.display = "inline-block";
+  gameFinish.style.pointerEvents = "all";
 }

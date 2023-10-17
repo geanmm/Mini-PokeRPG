@@ -18,6 +18,7 @@ function startBattle() {
         vTransition[i].style = "opacity: 1; height: 0px";
       }
       battleScreen.classList.toggle("show");
+      battleScreen.style.pointerEvents = "all";
       setTimeout(() => {}, 500);
     }, 500);
   }, 1000);
@@ -125,8 +126,16 @@ function renderPokemon(pokemon, options) {
     });
   });
 
-  nextBtn.onclick = () => finishBattle();
-  retryBtn.onclick = () => window.location.reload();
+  nextBtn.onclick = () => {
+    clickSound.play();
+    finishBattle();
+  };
+  retryBtn.onclick = () => {
+    clickSound.play();
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  };
 
   function resetInfo() {
     optionsContainer.innerText = ``;
@@ -142,6 +151,7 @@ function finishBattle() {
   vTransition[0].removeAttribute("style");
   vTransition[1].removeAttribute("style");
   battleScreen.classList.toggle("show");
+  battleScreen.style.pointerEvents = "none";
 
   playerStatus.fighting = false;
   battleMusic.stop();
