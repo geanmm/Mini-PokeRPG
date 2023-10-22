@@ -149,6 +149,7 @@ const playerStatus = {
   finish: false,
 };
 // console.log(imageLoading);
+let moving;
 
 function animate() {
   window.requestAnimationFrame(animate);
@@ -168,7 +169,7 @@ function animate() {
   player.draw();
   foreground.draw();
 
-  let moving = true;
+  moving = true;
   player.moving = false;
 
   if (playerStatus.fighting || playerStatus.finish) return;
@@ -392,6 +393,682 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
+canvas.addEventListener("click", handleClickMovement);
+
+async function handleClickMovement(e) {
+  const rect = canvas.getBoundingClientRect();
+
+  const mouseOnCanvas = {
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top,
+  };
+
+  const distanceX = canvas.width / 2 - mouseOnCanvas.x;
+  const distanceY = canvas.height / 2 - mouseOnCanvas.y;
+
+  const clickRight = () => {
+    return new Promise((res) => {
+      player.image = player.sprites.right;
+      canvas.removeEventListener("click", handleClickMovement);
+      let i = 0;
+      const interval = setInterval(() => {
+        for (let i = 0; i < boundaries.length; i++) {
+          const boundary = boundaries[i];
+          if (
+            rectangularCollision({
+              object1: player,
+              object2: {
+                ...boundary,
+                position: {
+                  x: boundary.position.x - 3,
+                  y: boundary.position.y,
+                },
+              },
+            })
+          ) {
+            moving = false;
+            break;
+          }
+        }
+        if (i >= Math.abs(distanceX) || !moving || playerStatus.fighting) {
+          clearInterval(interval);
+          canvas.addEventListener("click", handleClickMovement);
+          keys.right.pressed = false;
+          res("right");
+        } else {
+          i += 3;
+          keys.right.pressed = true;
+          player.moving = true;
+          movables.forEach((movable) => {
+            movable.position.x -= 3;
+          });
+        }
+      }, 15);
+    });
+  };
+  const clickLeft = () => {
+    return new Promise((res) => {
+      player.image = player.sprites.left;
+      canvas.removeEventListener("click", handleClickMovement);
+
+      let i = 0;
+      const interval = setInterval(() => {
+        for (let i = 0; i < boundaries.length; i++) {
+          const boundary = boundaries[i];
+          if (
+            rectangularCollision({
+              object1: player,
+              object2: {
+                ...boundary,
+                position: {
+                  x: boundary.position.x + 3,
+                  y: boundary.position.y,
+                },
+              },
+            })
+          ) {
+            moving = false;
+            break;
+          }
+        }
+        if (i >= distanceX || !moving || playerStatus.fighting) {
+          clearInterval(interval);
+          canvas.addEventListener("click", handleClickMovement);
+          keys.left.pressed = false;
+          res("left");
+        } else {
+          i += 3;
+          keys.left.pressed = true;
+          player.moving = true;
+          movables.forEach((movable) => {
+            movable.position.x += 3;
+          });
+        }
+      }, 15);
+    });
+  };
+  const clickUp = () => {
+    return new Promise((res) => {
+      player.image = player.sprites.up;
+      canvas.removeEventListener("click", handleClickMovement);
+      let i = 0;
+      const interval = setInterval(() => {
+        for (let i = 0; i < boundaries.length; i++) {
+          const boundary = boundaries[i];
+          if (
+            rectangularCollision({
+              object1: player,
+              object2: {
+                ...boundary,
+                position: {
+                  x: boundary.position.x,
+                  y: boundary.position.y + 3,
+                },
+              },
+            })
+          ) {
+            moving = false;
+            break;
+          }
+        }
+        if (i >= distanceY || !moving || playerStatus.fighting) {
+          clearInterval(interval);
+          canvas.addEventListener("click", handleClickMovement);
+          keys.up.pressed = false;
+          res("up");
+        } else {
+          i += 3;
+          keys.up.pressed = true;
+          player.moving = true;
+          movables.forEach((movable) => {
+            movable.position.y += 3;
+          });
+        }
+      }, 15);
+    });
+  };
+  const clickDown = () => {
+    return new Promise((res) => {
+      player.image = player.sprites.down;
+      canvas.removeEventListener("click", handleClickMovement);
+      let i = 0;
+      const interval = setInterval(() => {
+        for (let i = 0; i < boundaries.length; i++) {
+          const boundary = boundaries[i];
+          if (
+            rectangularCollision({
+              object1: player,
+              object2: {
+                ...boundary,
+                position: {
+                  x: boundary.position.x,
+                  y: boundary.position.y - 3,
+                },
+              },
+            })
+          ) {
+            moving = false;
+            break;
+          }
+        }
+        if (i >= Math.abs(distanceY) || !moving || playerStatus.fighting) {
+          clearInterval(interval);
+          canvas.addEventListener("click", handleClickMovement);
+          keys.down.pressed = false;
+          res("down");
+        } else {
+          i += 3;
+          keys.down.pressed = true;
+          player.moving = true;
+          movables.forEach((movable) => {
+            movable.position.y -= 3;
+          });
+        }
+      }, 15);
+    });
+  };
+
+  //right
+  if (distanceX < 0) {
+    await clickRight();
+  }
+  //left
+  if (distanceX > 0) {
+    await clickLeft();
+  }
+  //up
+  if (distanceY > 0) {
+    await clickUp();
+  }
+  //down
+  if (distanceY < 0) {
+    await clickDown();
+  }
+}
+
+// function handleClickMovement() {
+
+//   const distanceX = canvas.width / 2 - mouseOnCanvas.x;
+//   const distanceY = canvas.height / 2 - mouseOnCanvas.y;
+//   if (distanceX < 0) {
+//     player.image = player.sprites.right;
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x - 3,
+//                 y: boundary.position.y,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= Math.abs(distanceX) || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.right.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.right.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.x -= 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //left
+//   if (distanceX > 0) {
+//     player.image = player.sprites.left;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     // const distance = background.position.x - mousePosX;
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x + 3,
+//                 y: boundary.position.y,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= distanceX || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.left.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.left.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.x += 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //up
+//   if (distanceY > 0) {
+//     player.image = player.sprites.up;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x,
+//                 y: boundary.position.y + 3,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= distanceY || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.up.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.up.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.y += 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //down
+//   if (distanceY < 0) {
+//     player.image = player.sprites.down;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x,
+//                 y: boundary.position.y - 3,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= Math.abs(distanceY) || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.down.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.down.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.y -= 3;
+//         });
+//       }
+//     }, 10);
+//   }
+
+// function handleClickMovement() {
+
+//   const distanceX = canvas.width / 2 - mouseOnCanvas.x;
+//   const distanceY = canvas.height / 2 - mouseOnCanvas.y;
+//   if (distanceX < 0) {
+//     player.image = player.sprites.right;
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x - 3,
+//                 y: boundary.position.y,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= Math.abs(distanceX) || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.right.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.right.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.x -= 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //left
+//   if (distanceX > 0) {
+//     player.image = player.sprites.left;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     // const distance = background.position.x - mousePosX;
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x + 3,
+//                 y: boundary.position.y,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= distanceX || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.left.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.left.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.x += 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //up
+//   if (distanceY > 0) {
+//     player.image = player.sprites.up;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x,
+//                 y: boundary.position.y + 3,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= distanceY || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.up.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.up.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.y += 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //down
+//   if (distanceY < 0) {
+//     player.image = player.sprites.down;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x,
+//                 y: boundary.position.y - 3,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= Math.abs(distanceY) || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.down.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.down.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.y -= 3;
+//         });
+//       }
+//     }, 10);
+//   }
+
+// }
+
+// function handleClickMovement() {
+
+//   const distanceX = canvas.width / 2 - mouseOnCanvas.x;
+//   const distanceY = canvas.height / 2 - mouseOnCanvas.y;
+//   if (distanceX < 0) {
+//     player.image = player.sprites.right;
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x - 3,
+//                 y: boundary.position.y,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= Math.abs(distanceX) || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.right.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.right.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.x -= 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //left
+//   if (distanceX > 0) {
+//     player.image = player.sprites.left;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     // const distance = background.position.x - mousePosX;
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x + 3,
+//                 y: boundary.position.y,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= distanceX || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.left.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.left.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.x += 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //up
+//   if (distanceY > 0) {
+//     player.image = player.sprites.up;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x,
+//                 y: boundary.position.y + 3,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= distanceY || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.up.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.up.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.y += 3;
+//         });
+//       }
+//     }, 15);
+//   }
+//   //down
+//   if (distanceY < 0) {
+//     player.image = player.sprites.down;
+
+//     canvas.removeEventListener("click", handleClickMovement);
+//     let i = 0;
+//     const interval = setInterval(() => {
+//       for (let i = 0; i < boundaries.length; i++) {
+//         const boundary = boundaries[i];
+//         if (
+//           rectangularCollision({
+//             object1: player,
+//             object2: {
+//               ...boundary,
+//               position: {
+//                 x: boundary.position.x,
+//                 y: boundary.position.y - 3,
+//               },
+//             },
+//           })
+//         ) {
+//           moving = false;
+//           break;
+//         }
+//       }
+//       if (i >= Math.abs(distanceY) || !moving || playerStatus.fighting) {
+//         clearInterval(interval);
+//         canvas.addEventListener("click", handleClickMovement);
+//         keys.down.pressed = false;
+//       } else {
+//         i += 3;
+//         keys.down.pressed = true;
+//         player.moving = true;
+//         movables.forEach((movable) => {
+//           movable.position.y -= 3;
+//         });
+//       }
+//     }, 10);
+//   }
+
+// }
 function finishGame() {
   backgroundMusic.stop();
   finishMusic.play();
