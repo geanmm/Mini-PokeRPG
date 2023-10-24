@@ -502,28 +502,15 @@ span:hover > .mini,
   box-shadow: inset 0px 0px 0px 8px rgba(0, 0, 0, 0.3);
   pointer-events: none;
 }
-
-@media only screen and (min-width: 320px) and (orientation: portrait) {
-  main {
-    transform: rotate(90deg) scale(0.7);
-  }
-}
-
-@media only screen and (min-width: 320px) and (orientation: landscape) {
+@media only screen and (max-width: 915px) {
   main {
     transform: scale(0.7);
   }
 }
 
-@media only screen and (min-width: 897px) and (orientation: portrait) {
+@media only screen and (max-width: 680px) {
   main {
-    transform: rotate(90deg) scale(1);
-  }
-}
-
-@media only screen and (min-width: 915px) and (orientation: landscape) {
-  main {
-    transform: scale(1);
+    transform: scale(0.5);
   }
 }
 

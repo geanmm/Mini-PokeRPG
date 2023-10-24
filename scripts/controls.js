@@ -12,6 +12,8 @@ const finishMusic = new createSound("finish.mp3");
 const clickSound = new createSound("click.wav");
 
 playBtn.onclick = () => {
+  if (window.innerWidth < window.innerHeight)
+    return alert("This game only works in landscape mode, turn your device,");
   const screenBorders = document.querySelector(".border-screen");
   const screenMain = document.querySelector(".main-screen");
   clickSound.play();

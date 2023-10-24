@@ -22,18 +22,18 @@ playerRightImage.src = "./assets/MoveRight.png";
 
 const offset = {
   x: -280,
-  y: -370,
+  y: -376,
 };
 
-//Mapa 40x60 tiles
+//Mapa 70x70 tiles
 const collisionsMap = [];
 const battleAreaMap = [];
 const finishAreaMap = [];
-//Separar todas as 60 linhas (40 colunas)
-for (let i = 0; i < collisions.length; i += 40) {
-  collisionsMap.push(collisions.slice(i, i + 40));
-  battleAreaMap.push(battleAreaData.slice(i, i + 40));
-  finishAreaMap.push(finishArea.slice(i, i + 40));
+//Separar todas as 70 linhas (70 colunas)
+for (let i = 0; i < collisions.length; i += 70) {
+  collisionsMap.push(collisions.slice(i, i + 70));
+  battleAreaMap.push(battleAreaData.slice(i, i + 70));
+  finishAreaMap.push(finishArea.slice(i, i + 70));
 }
 
 const boundaries = [];
